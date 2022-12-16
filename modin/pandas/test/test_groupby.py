@@ -227,6 +227,7 @@ def test_mixed_dtypes_groupby(as_index):
         eval_sum(modin_groupby, pandas_groupby)
         eval_ngroup(modin_groupby, pandas_groupby)
         eval_nunique(modin_groupby, pandas_groupby)
+        eval_value_counts(modin_groupby, pandas_groupby)
         eval_median(modin_groupby, pandas_groupby)
         eval_general(modin_groupby, pandas_groupby, lambda df: df.head(n))
         eval_cumprod(modin_groupby, pandas_groupby)
@@ -625,6 +626,7 @@ def test_single_group_row_groupby():
     eval_sum(modin_groupby, pandas_groupby)
     eval_ngroup(modin_groupby, pandas_groupby)
     eval_nunique(modin_groupby, pandas_groupby)
+    eval_value_counts(modin_groupby, pandas_groupby)
     eval_median(modin_groupby, pandas_groupby)
     eval_general(modin_groupby, pandas_groupby, lambda df: df.head(n))
     eval_cumprod(modin_groupby, pandas_groupby)
@@ -743,6 +745,7 @@ def test_large_row_groupby(is_by_category):
     eval_sum(modin_groupby, pandas_groupby)
     eval_ngroup(modin_groupby, pandas_groupby)
     eval_nunique(modin_groupby, pandas_groupby)
+    eval_value_counts(modin_groupby, pandas_groupby)
     eval_median(modin_groupby, pandas_groupby)
     eval_general(modin_groupby, pandas_groupby, lambda df: df.head(n))
     # eval_cumprod(modin_groupby, pandas_groupby) causes overflows
@@ -850,6 +853,8 @@ def test_simple_col_groupby():
     # Pandas fails on this case with ValueError
     # eval_ngroup(modin_groupby, pandas_groupby)
     # eval_nunique(modin_groupby, pandas_groupby)
+    # NotImplementedError: DataFrameGroupBy.value_counts only handles axis=0
+    # eval_value_counts(modin_groupby, pandas_groupby)
     eval_median(modin_groupby, pandas_groupby)
     eval_general(
         modin_groupby,
@@ -976,6 +981,7 @@ def test_series_groupby(by, as_index_series_or_dataframe):
         eval_size(modin_groupby, pandas_groupby)
         eval_ngroup(modin_groupby, pandas_groupby)
         eval_nunique(modin_groupby, pandas_groupby)
+        eval_value_counts(modin_groupby, pandas_groupby)
         eval_median(modin_groupby, pandas_groupby)
         eval_general(modin_groupby, pandas_groupby, lambda df: df.head(n))
         eval_cumprod(modin_groupby, pandas_groupby)
@@ -1130,6 +1136,11 @@ def eval_ngroup(modin_groupby, pandas_groupby):
 @_copy_pandas_groupby_if_needed
 def eval_nunique(modin_groupby, pandas_groupby):
     df_equals(modin_groupby.nunique(), pandas_groupby.nunique())
+
+
+@_copy_pandas_groupby_if_needed
+def eval_value_counts(modin_groupby, pandas_groupby):
+    df_equals(modin_groupby.value_counts(), pandas_groupby.value_counts())
 
 
 @_copy_pandas_groupby_if_needed
