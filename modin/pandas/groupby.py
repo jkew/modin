@@ -1339,24 +1339,6 @@ class SeriesGroupBy(SeriesGroupByCompat, DataFrameGroupBy):
             )
         )
 
-    def value_counts(
-        self,
-        normalize: bool = False,
-        sort: bool = True,
-        ascending: bool = False,
-        bins=None,
-        dropna: bool = True,
-    ):
-        return self._default_to_pandas(
-            lambda ser: ser.value_counts(
-                normalize=normalize,
-                sort=sort,
-                ascending=ascending,
-                bins=bins,
-                dropna=dropna,
-            )
-        )
-
 
 if IsExperimental.get():
     from modin.experimental.cloud.meta_magic import make_wrapped_class
