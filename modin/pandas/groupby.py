@@ -344,6 +344,19 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
             )
         )
 
+    def value_counts(
+        self, 
+        subset=None,
+        normalize: bool = False,
+        sort: bool = True,
+        ascending: bool = False,
+        dropna: bool = True):
+        # dfGroupBy.value_counts is semantically
+        # equivalent to df.value_counts([<by>, <other...>])
+        # it returns a MultiIndex Series        
+        subset = self._by.columns.append(self._columns).unique().array
+        return self._df.value_counts(subset=subset)
+
     def apply(self, func, *args, **kwargs):
         if not isinstance(func, BuiltinFunctionType):
             func = wrap_udf_function(func)
